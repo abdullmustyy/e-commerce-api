@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import { adminRoutes } from "./routes/admin.js";
 import { shopRoutes } from "./routes/shop.js";
+import { show404Page } from "./controllers/404.js";
 import path from "path";
 import { __dirname } from "./utils/path.js";
 
@@ -16,8 +17,6 @@ app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(adminRoutes);
 app.use(shopRoutes);
 
-app.use((req, res, next) => {
-  res.status(404).render("404");
-});
+app.use(show404Page);
 
 app.listen(3000);
