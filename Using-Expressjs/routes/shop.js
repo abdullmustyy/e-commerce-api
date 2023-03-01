@@ -1,6 +1,20 @@
 import { Router } from "express";
-import { getProducts } from "../controllers/products.js";
+import {
+  getCart,
+  getCheckout,
+  getIndex,
+  getOrders,
+  getProductsList,
+} from "../controllers/shop.js";
 
 export const shopRoutes = Router();
 
-shopRoutes.get("/", getProducts);
+shopRoutes.get("/", getIndex);
+
+shopRoutes.get("/products-list", getProductsList);
+
+shopRoutes.get("/cart", getCart);
+
+shopRoutes.get("/orders", getOrders);
+
+shopRoutes.get("/checkout", getCheckout);

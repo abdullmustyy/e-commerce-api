@@ -4,17 +4,26 @@ import { __dirname } from "../utils/path.js";
 
 const p = path.join(__dirname, "..", "data", "products.json");
 
+const getProductFromFile = (cb) => {
+  fs.readFile(p, (err, fileContent) => {
+    if (err) {
+      cb([]);
+    } else {
+      cb(JSON.parse(fileContent));
+    }
+  });
+};
+
 export class Product {
-  constructor(title) {
+  constructor(title, imageUrl, price, description) {
     this.title = title;
+    this.imageUrl = imageUrl;
+    this.price = price;
+    this.description = description;
   }
 
   save() {
-    fs.readFile(p, (err, fileContent) => {
-      let products = [];
-      if (!err) {
-        products = JSON.parse(fileContent);
-      }
+    getProductFromFile((products) => {
       products.push(this);
       fs.writeFile(p, JSON.stringify(products), (err) => {
         if (err) {
@@ -25,11 +34,6 @@ export class Product {
   }
 
   static fetchAll(cb) {
-    fs.readFile(p, (err, fileContent) => {
-      if (err) {
-        cb([]);
-      }
-      cb(JSON.parse(fileContent));
-    });
+    getProductFromFile(cb);
   }
 }

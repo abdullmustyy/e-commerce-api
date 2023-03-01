@@ -1,10 +1,10 @@
-<%- include("includes/head") %>
+<%- include("../includes/head") %>
     </head>
 
     <body>
-        <%- include("includes/navigation") %>
+        <%- include("../includes/navigation") %>
             <main>
-                <form class="product-form" action="/admin/remove-product" method="POST">
+                <form class="product-form" action="/admin/remove-product" method="post">
                     <div class="form-control">
                         <label for="title">Which product will you like to remove?</label>
                         <input type="text" name="title" id="title">
