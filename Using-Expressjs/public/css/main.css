@@ -49,6 +49,7 @@ main {
 .main-header__item a:active,
 .main-header__item a.active {
     color: #ffeb3b;
+    text-decoration: underline;
 }
 
 .grid {

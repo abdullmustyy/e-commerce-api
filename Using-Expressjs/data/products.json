@@ -1,1 +1,16 @@
-[{"title":"Life of a Queer","imageUrl":"https://res.cloudinary.com/dtgigdp2j/image/upload/v1675880086/postImages/glzzun1hhskhy3h6ju92.jpg","price":"100","description":"This is a book about queers, if you get uncomfortable about queer-related things easily please do not read this book."},{"title":"Is my name in the Book of Life","imageUrl":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRm-srO2WcZ-leVQ2UyBgQlSEYZTwN28u4-rA&usqp=CAU","price":"19.99","description":"This book takes you on a journey of wondering if your name is in the book of life. Sit back and enjoy your trip."}]
+[
+  {
+    "id": "123455",
+    "title": "Life of a Queer",
+    "imageUrl": "https://res.cloudinary.com/dtgigdp2j/image/upload/v1675880086/postImages/glzzun1hhskhy3h6ju92.jpg",
+    "price": "100",
+    "description": "This is a book about queers, if you get uncomfortable about queer-related things easily please do not read this book."
+  },
+  {
+    "title": "Stop just existing, start LIVING!",
+    "imageUrl": "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aHVtYW58ZW58MHx8MHx8&w=1000&q=80",
+    "price": "29.99",
+    "description": "Don't just exist, that's boring. Explore!",
+    "id": "0.6582876035749567"
+  }
+]

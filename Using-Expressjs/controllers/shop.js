@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { __dirname } from "../utils/path.js";
 import { Product } from "../models/product.js";
+import { Cart } from "../models/cart.js";
 
 const p = path.join(__dirname, "..", "data", "products.json");
 
@@ -25,11 +26,30 @@ const getProductsList = (req, res, next) => {
   });
 };
 
+const getProduct = (req, res, next) => {
+  const productId = req.params.productId;
+  Product.findById(productId, (product) => {
+    res.render("shop/product-detail", {
+      product: product,
+      pageTitle: `Product ${productId}`,
+      path: null,
+    });
+  });
+};
+
 const getCart = (req, res, next) => {
   res.render("shop/cart", {
     pageTitle: "Cart",
     path: "/cart",
   });
+};
+
+const postCart = (req, res, next) => {
+  const productId = req.body.productId;
+  Product.findById(productId, (product) => {
+    Cart.addProduct(product.id, product.price);
+  });
+  res.redirect("/cart");
 };
 
 const getOrders = (req, res, next) => {
@@ -46,4 +66,12 @@ const getCheckout = (req, res, next) => {
   });
 };
 
-export { getIndex, getProductsList, getCart, getCheckout, getOrders };
+export {
+  getIndex,
+  getProductsList,
+  getProduct,
+  getCart,
+  postCart,
+  getCheckout,
+  getOrders,
+};
