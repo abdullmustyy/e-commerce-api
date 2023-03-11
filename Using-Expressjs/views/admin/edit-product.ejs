@@ -4,7 +4,35 @@
     <body>
         <%- include("../includes/navigation") %>
             <main>
-                <h1>The <%= pageTitle %> page will disply here!</h1>
+                <form class="product-form" action="/admin/<%= editing === 'true' ? 'edit-product' : 'add-product' %>"
+                    method="post">
+                    <% if (editing) { %><input type="hidden" name="productId" value="<%= product.id %>">
+                        <% } %>
+                            <div class="form-control">
+                                <label for="title">Title</label>
+                                <input type="text" name="title" id="title"
+                                    value="<%= editing==='true' ? product.title : '' %>">
+                            </div>
+                            <div class="form-control">
+                                <label for="imageUrl">Image URL</label>
+                                <input type="text" name="imageUrl" id="imageUrl"
+                                    value="<%= editing==='true' ? product.imageUrl : '' %>">
+                            </div>
+                            <div class="form-control">
+                                <label for="price">Price</label>
+                                <input type="number" step="0.01" name="price" id="price"
+                                    value="<%= editing==='true' ? product.price : '' %>">
+                            </div>
+                            <div class="form-control">
+                                <label for="description">Description</label>
+                                <textarea name="description"
+                                    id="description"><%= editing==='true' ? product.description : '' %></textarea>
+                            </div>
+
+                            <button class="btn" type="submit">
+                                <%= editing==="true" ? "Update Product" : "Add Product" %>
+                            </button>
+                </form>
             </main>
     </body>
 

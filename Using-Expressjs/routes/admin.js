@@ -2,9 +2,10 @@ import { Router } from "express";
 import {
   getAddProduct,
   getAdminProducts,
-  getRemoveProduct,
-  postRemoveProduct,
   postAddProduct,
+  getEditProduct,
+  postEditProduct,
+  postDeleteProduct,
 } from "../controllers/admin.js";
 
 export const adminRoutes = Router();
@@ -13,8 +14,10 @@ adminRoutes.get("/admin/add-product", getAddProduct);
 
 adminRoutes.get("/admin/products", getAdminProducts);
 
-adminRoutes.get("/admin/remove-product", getRemoveProduct);
+adminRoutes.get("/admin/edit-product/:productId", getEditProduct);
 
-adminRoutes.post("/admin/product", postAddProduct);
+adminRoutes.post("/admin/add-product", postAddProduct);
 
-adminRoutes.post("/admin/remove-product", postRemoveProduct);
+adminRoutes.post("/admin/edit-product", postEditProduct);
+
+adminRoutes.post("/admin/delete-product", postDeleteProduct);
