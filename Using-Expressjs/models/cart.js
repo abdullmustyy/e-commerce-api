@@ -3,6 +3,9 @@ import path from "path";
 import { __dirname } from "../utils/path.js";
 
 const p = path.join(__dirname, "..", "data", "cart.json");
+export const writeFile = (data) => {
+  fs.writeFile(p, JSON.stringify(data), (err) => console.log(err));
+};
 
 export class Cart {
   static addProduct(id, productPrice) {
@@ -29,7 +32,7 @@ export class Cart {
         cart.products = [...cart.products, updatedProduct];
       }
       cart.totalPrice += +productPrice;
-      fs.writeFile(p, JSON.stringify(cart), (err) => console.log(err));
+      writeFile(cart);
     });
   }
 
@@ -48,7 +51,18 @@ export class Cart {
       );
       const updatedCart = { ...cart, products: updatedCartProduct };
       updatedCart.totalPrice -= productPrice * productQuantity;
-      fs.writeFile(p, JSON.stringify(updatedCart), (err) => console.log(err));
+      writeFile(updatedCart);
+    });
+  }
+
+  static getCart(cb) {
+    fs.readFile(p, (err, fileContent) => {
+      const cart = JSON.parse(fileContent);
+      if (err) {
+        cb(null);
+      } else {
+        cb(cart);
+      }
     });
   }
 }

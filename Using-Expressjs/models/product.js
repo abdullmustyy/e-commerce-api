@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { Cart } from "./cart.js";
+import { Cart, writeFile } from "./cart.js";
 import { __dirname } from "../utils/path.js";
 
 const p = path.join(__dirname, "..", "data", "products.json");
@@ -32,11 +32,34 @@ export class Product {
         );
         const updatedProducts = [...products];
         updatedProducts[existingProductIndex] = this;
-        fs.writeFile(p, JSON.stringify(updatedProducts), (err) => {
-          if (err) {
-            console.log(err);
-          }
-        });
+
+        products[existingProductIndex].price === this.price
+          ? fs.writeFile(p, JSON.stringify(updatedProducts), (err) => {
+              if (err) {
+                console.log(err);
+              }
+            })
+          : Cart.getCart((cart) => {
+              const productInCart = cart.products.find(
+                (product) => product.id === this.id
+              );
+
+              if (productInCart) {
+                const substractOldPrice =
+                  cart.totalPrice -
+                  products[existingProductIndex].price * productInCart.qty;
+                const addNewPrice =
+                  +substractOldPrice + +this.price * productInCart.qty;
+                const updatedCart = { ...cart, totalPrice: addNewPrice };
+                writeFile(updatedCart);
+              }
+
+              fs.writeFile(p, JSON.stringify(updatedProducts), (err) => {
+                if (err) {
+                  console.log(err);
+                }
+              });
+            });
       } else {
         this.id = Math.random().toString();
         products.push(this);

@@ -38,9 +38,22 @@ const getProduct = (req, res, next) => {
 };
 
 const getCart = (req, res, next) => {
-  res.render("shop/cart", {
-    pageTitle: "Cart",
-    path: "/cart",
+  Cart.getCart((cart) => {
+    Product.fetchAll((products) => {
+      const productsInCart = cart.products.map((cartProduct) => {
+        const product = products.find(
+          (product) => product.id === cartProduct.id
+        );
+        return { ...product, qty: cartProduct.qty };
+      });
+
+      res.render("shop/cart", {
+        pageTitle: "Cart",
+        path: "/cart",
+        cartProducts: productsInCart,
+        totalPrice: cart.totalPrice,
+      });
+    });
   });
 };
 
