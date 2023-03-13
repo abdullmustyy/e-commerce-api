@@ -27,10 +27,13 @@
                                         <%= product.description %>
                                     </p>
                                 </div>
-                                <!-- <div class="card__actions">
-                                    <a href="/product/<%= product.id %>" class="btn">Details</a>
-                                    <%- include("../includes/cart-form", {product: product}) %>
-                                </div> -->
+                                <div class="card__actions">
+                                    <form action="/cart-delete-item" method="post">
+                                        <input type="hidden" name="productId" value="<%= product.id %>">
+                                        <input type="hidden" name="productPrice" value="<%= product.price %>">
+                                        <button type="submit" class="btn">Delete</button>
+                                    </form>
+                                </div>
                             </article>
                             <% } %>
                     </div>

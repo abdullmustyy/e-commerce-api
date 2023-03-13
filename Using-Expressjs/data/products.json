@@ -1,16 +1,1 @@
-[
-  {
-    "id": "0.30254988359882695",
-    "title": "test",
-    "imageUrl": "https://cdn.pixabay.com/photo/2016/03/31/20/51/book-1296045_960_720.png",
-    "price": "100",
-    "description": "testing 1"
-  },
-  {
-    "id": "0.6861900389534419",
-    "title": "test 2",
-    "imageUrl": "https://res.cloudinary.com/dtgigdp2j/image/upload/v1665773152/postImages/lqisoujq06ihhgqoh7we.jpg",
-    "price": "50",
-    "description": "testing 2"
-  }
-]
+[{"id":"0.006110471987626376","title":"test 1","imageUrl":"https://cdn.pixabay.com/photo/2016/03/31/20/51/book-1296045_960_720.png","price":"100","description":"testing 1"},{"id":"0.9263861789355903","title":"test 2","imageUrl":"https://res.cloudinary.com/dtgigdp2j/image/upload/v1665773152/postImages/lqisoujq06ihhgqoh7we.jpg","price":"200","description":"testing 2"}]

@@ -42,10 +42,11 @@ export class Cart {
         return;
       }
       const cart = JSON.parse(fileContent);
-      const productIndex = cart.products.findIndex(
-        (product) => product.id === id
-      );
-      const productQuantity = cart.products[productIndex].qty;
+      const product = cart.products.find((product) => product.id === id);
+      if (!product) {
+        return;
+      }
+      const productQuantity = product.qty;
       const updatedCartProduct = cart.products.filter(
         (product) => product.id !== id
       );
