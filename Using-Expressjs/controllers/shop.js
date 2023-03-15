@@ -17,24 +17,30 @@ const getIndex = (req, res, next) => {
 };
 
 const getProductsList = (req, res, next) => {
-  Product.fetchAll((products) => {
-    res.render("shop/product-list", {
-      prods: products,
-      pageTitle: "Product List",
-      path: "/products-list",
-    });
-  });
+  Product.fetchAll()
+    .then(([rows, fieldData]) => {
+      res.render("shop/product-list", {
+        prods: rows,
+        pageTitle: "Product List",
+        path: "/products-list",
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 const getProduct = (req, res, next) => {
   const productId = req.params.productId;
-  Product.findById(productId, (product) => {
-    res.render("shop/product-detail", {
-      product: product,
-      pageTitle: `Product ${productId}`,
-      path: null,
+  Product.findById(productId)
+    .then(([product]) => {
+      res.render("shop/product-detail", {
+        product: product[0],
+        pageTitle: `Product ${productId}`,
+        path: null,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
     });
-  });
 };
 
 const getCart = (req, res, next) => {
