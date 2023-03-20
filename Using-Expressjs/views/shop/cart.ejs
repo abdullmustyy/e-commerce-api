@@ -21,7 +21,7 @@
                                         $<%= product.price %>
                                     </h2>
                                     <h3 class="product__qty">
-                                        <%= product.qty %> of this!
+                                        <%= product.cartItem.quantity %> of this!
                                     </h3>
                                     <p class="product__description">
                                         <%= product.description %>
@@ -37,8 +37,6 @@
                             </article>
                             <% } %>
                     </div>
-                    <h1>Total price: <%= totalPrice %>
-                    </h1>
                     <% } else { %>
                         <h1>There is no product in your cart, add product(s) to cart to see them here.</h1>
                         <% } %>
