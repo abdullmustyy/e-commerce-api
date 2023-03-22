@@ -37,6 +37,12 @@
                             </article>
                             <% } %>
                     </div>
+                    <hr>
+                    <div class="centered">
+                        <form action="/create-order" method="post">
+                            <button type="submit" class="btn">Order Now!</button>
+                        </form>
+                    </div>
                     <% } else { %>
                         <h1>There is no product in your cart, add product(s) to cart to see them here.</h1>
                         <% } %>
