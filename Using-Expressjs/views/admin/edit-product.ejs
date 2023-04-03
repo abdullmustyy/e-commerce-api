@@ -6,7 +6,7 @@
             <main>
                 <form class="product-form" action="/admin/<%= editing === 'true' ? 'edit-product' : 'add-product' %>"
                     method="post">
-                    <% if (editing) { %><input type="hidden" name="productId" value="<%= product.id %>">
+                    <% if (editing) { %><input type="hidden" name="productId" value="<%= product._id %>">
                         <% } %>
                             <div class="form-control">
                                 <label for="title">Title</label>
