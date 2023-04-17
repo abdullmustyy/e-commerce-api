@@ -13,20 +13,20 @@ import {
 
 export const shopRoutes = Router();
 
-shopRoutes.get("/", getIndex);
+// shopRoutes.get("/", getIndex);
 
-shopRoutes.get("/products-list", getProductsList);
+// shopRoutes.get("/products-list", getProductsList);
 
-shopRoutes.get("/product/:productId", getProduct);
+// shopRoutes.get("/product/:productId", getProduct);
 
-shopRoutes.get("/cart", getCart);
+// shopRoutes.get("/cart", getCart);
 
-shopRoutes.post("/cart", postCart);
+// shopRoutes.post("/cart", postCart);
 
-shopRoutes.post("/cart-delete-item", postCartDeleteItem);
+// shopRoutes.post("/cart-delete-item", postCartDeleteItem);
 
-shopRoutes.get("/orders", getOrders);
+// shopRoutes.get("/orders", getOrders);
 
-shopRoutes.post("/create-order", postOrders);
+// shopRoutes.post("/create-order", postOrders);
 
-shopRoutes.get("/checkout", getCheckout);
+// shopRoutes.get("/checkout", getCheckout);

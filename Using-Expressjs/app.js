@@ -5,7 +5,8 @@ import { shopRoutes } from "./routes/shop.js";
 import { show404Page } from "./controllers/404.js";
 import path from "path";
 import { __dirname } from "./utils/path.js";
-import { mongoConnect } from "./utils/database.js";
+import mongoose from "mongoose";
+import { User } from "./models/user.js";
 
 const app = express();
 
@@ -15,21 +16,28 @@ app.set("views", path.join(__dirname, "..", "views"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "..", "public")));
 
-// app.use((req, res, next) => {
-//   User.findByPk(1)
-//     .then((user) => {
-//       req.user = user;
-//       next();
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// });
+app.use((req, res, next) => {
+  User.findById("642aebaf04483b8ba385dc2d")
+    .then((user) => {
+      req.user = new User(user.userName, user.email, user.cart, user._id);
+      next();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use(show404Page);
 
-mongoConnect(() => {
-  app.listen(3000);
-});
+mongoose
+  .connect(
+    "mongodb+srv://abdul:xLoR9GREjpZlXNA4@cluster0.rtdzvud.mongodb.net/?retryWrites=true&w=majority"
+  )
+  .then(() => {
+    app.listen(3000);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
