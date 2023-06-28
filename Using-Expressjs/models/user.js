@@ -1,118 +1,61 @@
-import { ObjectId } from "mongodb";
+import { Schema, model } from "mongoose";
 
-export class User {
-  constructor(userName, email, cart, id) {
-    this.userName = userName;
-    this.email = email;
-    this.cart = cart;
-    this._id = id;
+const userSchema = new Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  cart: {
+    items: [
+      {
+        productId: {
+          type: Schema.Types.ObjectId,
+          ref: "Product",
+          required: true,
+        },
+        quantity: { type: Number, required: true },
+      },
+    ],
+  },
+});
+
+userSchema.methods.addToCart = function (product) {
+  const cartProductIndex = this.cart.items.findIndex(
+    (cartProduct) => cartProduct.productId.toString() === product._id.toString()
+  );
+  const updatedCartItems = [...this.cart.items];
+  const updatedCart = {
+    items: updatedCartItems,
+  };
+
+  if (cartProductIndex >= 0) {
+    updatedCartItems[cartProductIndex].quantity += 1;
+  } else {
+    updatedCartItems.push({
+      productId: product._id,
+      quantity: 1,
+    });
   }
 
-  static findById(userId) {
-    const db = getDb();
-    return db.collection("users").findOne({ _id: new ObjectId(userId) });
-  }
+  this.cart = updatedCart;
+  return this.save();
+};
 
-  save() {
-    const db = getDb();
-    return db.collection("users").insertOne(this);
-  }
+userSchema.methods.removeFromCart = function (productId) {
+  const updatedCartItems = this.cart.items.filter(
+    (item) => item.productId.toString() !== productId.toString()
+  );
+  this.cart.items = updatedCartItems;
+  return this.save();
+};
 
-  getCart() {
-    const db = getDb();
-    const productIds = this.cart.items.map(
-      (cartProduct) => cartProduct.productId
-    );
+userSchema.methods.clearCart = function () {
+  this.cart = { items: [] };
+  return this.save();
+};
 
-    return db
-      .collection("products")
-      .find({ _id: { $in: productIds } })
-      .toArray()
-      .then((products) => {
-        return products.map((product) => ({
-          ...product,
-          quantity: this.cart.items.find(
-            (cartProduct) =>
-              cartProduct.productId.toString() === product._id.toString()
-          ).quantity,
-        }));
-      })
-      .then((cartProducts) => cartProducts)
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  addToCart(product) {
-    const db = getDb();
-    const cartProductIndex = this.cart.items.findIndex(
-      (cartProduct) =>
-        cartProduct.productId.toString() === product._id.toString()
-    );
-    const updatedCartItems = [...this.cart.items];
-    const updatedCart = {
-      items: updatedCartItems,
-    };
-
-    if (cartProductIndex >= 0) {
-      updatedCartItems[cartProductIndex].quantity += 1;
-    } else {
-      updatedCartItems.push({
-        productId: new ObjectId(product._id),
-        quantity: 1,
-      });
-    }
-
-    return db
-      .collection("users")
-      .updateOne(
-        { _id: new ObjectId(this._id) },
-        { $set: { cart: updatedCart } }
-      );
-  }
-
-  removeFromCart(product) {
-    const db = getDb();
-
-    return db
-      .collection("users")
-      .updateOne(
-        { _id: new ObjectId(this._id) },
-        { $pull: { "cart.items": { productId: product._id } } }
-      );
-  }
-
-  getOrders() {
-    const db = getDb();
-
-    return db
-      .collection("orders")
-      .find({ "user._id": new ObjectId(this._id) })
-      .toArray();
-  }
-
-  addOrder() {
-    const db = getDb();
-
-    return this.getCart()
-      .then((products) => {
-        const order = {
-          items: products,
-          user: { _id: new ObjectId(this._id), name: this.userName },
-        };
-        return db.collection("orders").insertOne(order);
-      })
-      .then(() => {
-        this.cart = { items: [] };
-        return db
-          .collection("users")
-          .updateOne(
-            { _id: new ObjectId(this._id) },
-            { $set: { cart: { items: [] } } }
-          );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-}
+export default model("User", userSchema);

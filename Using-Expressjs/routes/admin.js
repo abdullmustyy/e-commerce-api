@@ -10,14 +10,14 @@ import {
 
 export const adminRoutes = Router();
 
-// adminRoutes.get("/add-product", getAddProduct);
+adminRoutes.get("/add-product", getAddProduct);
 
-// adminRoutes.get("/products", getAdminProducts);
+adminRoutes.get("/products", getAdminProducts);
 
-// adminRoutes.get("/edit-product/:productId", getEditProduct);
+adminRoutes.get("/edit-product/:productId", getEditProduct);
 
-// adminRoutes.post("/add-product", postAddProduct);
+adminRoutes.post("/add-product", postAddProduct);
 
-// adminRoutes.post("/edit-product", postEditProduct);
+adminRoutes.post("/edit-product", postEditProduct);
 
-// adminRoutes.post("/delete-product", postDeleteProduct);
+adminRoutes.post("/delete-product", postDeleteProduct);

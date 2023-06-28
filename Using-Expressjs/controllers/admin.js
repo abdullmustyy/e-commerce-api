@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { __dirname } from "../utils/path.js";
-import { Product } from "../models/product.js";
+import Product from "../models/product.js";
 
 const p = path.join(__dirname, "..", "data", "products.json");
 
@@ -14,7 +14,7 @@ const getAddProduct = (req, res, next) => {
 };
 
 const getAdminProducts = (req, res, next) => {
-  Product.fetchAll()
+  Product.find()
     .then((products) => {
       res.render("admin/products", {
         prods: products,
@@ -53,15 +53,14 @@ const getEditProduct = (req, res) => {
 };
 
 const postAddProduct = (req, res, next) => {
-  const { title, price, imageUrl, description } = req.body;
-  const product = new Product(
-    title,
-    price,
-    imageUrl,
-    description,
-    null,
-    req.user._id
-  );
+  const { title, imageUrl, price, description } = req.body;
+  const product = new Product({
+    title: title,
+    imageUrl: imageUrl,
+    price: price,
+    description: description,
+    userId: req.user
+  });
 
   product
     .save()
@@ -75,11 +74,10 @@ const postAddProduct = (req, res, next) => {
 };
 
 const postEditProduct = (req, res, next) => {
-  const { productId, title, price, imageUrl, description } = req.body;
-  const product = new Product(title, price, imageUrl, description, productId);
+  const { productId, title, imageUrl, price, description } = req.body;
 
-  product
-    .save()
+  Product
+    .updateOne({ _id: productId }, { title: title, imageUrl: imageUrl, price: price, description: description })
     .then(() => {
       console.log("Updated product!");
       res.redirect("/admin/products");
@@ -91,8 +89,9 @@ const postEditProduct = (req, res, next) => {
 
 const postDeleteProduct = (req, res, next) => {
   const productId = req.body.productId;
-  Product.deleteById(productId)
+  Product.deleteOne({ _id: productId })
     .then(() => {
+      console.log("Product deleted!")
       res.redirect("/products-list");
     })
     .catch((err) => {
