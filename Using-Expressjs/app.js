@@ -7,6 +7,7 @@ import path from "path";
 import { __dirname } from "./utils/path.js";
 import mongoose from "mongoose";
 import User from "./models/user.js";
+import chalk from "chalk";
 
 const app = express();
 
@@ -36,19 +37,24 @@ mongoose
     "mongodb+srv://abdul:xLoR9GREjpZlXNA4@cluster0.rtdzvud.mongodb.net/shop?retryWrites=true&w=majority"
   )
   .then(() => {
+    console.log(chalk.white("MongoDB Connected"));
+
     User.findOne().then((user) => {
       if (!user) {
         const user = new User({
           name: "Abdul",
           email: "abdul@test.com",
           cart: {
-            items: []
-          }
+            items: [],
+          },
         });
         user.save();
       }
     });
-    app.listen(3000);
+
+    app.listen(5000, () => {
+      console.log(chalk.yellow.underline("Server started on port 5000"));
+    });
   })
   .catch((err) => {
     console.log(err);
