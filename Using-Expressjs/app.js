@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import { adminRoutes } from "./routes/admin.js";
 import { shopRoutes } from "./routes/shop.js";
+import { authRoutes } from "./routes/auth.js";
 import { show404Page } from "./controllers/404.js";
 import path from "path";
 import { __dirname } from "./utils/path.js";
@@ -30,6 +31,7 @@ app.use((req, res, next) => {
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
+app.use(authRoutes);
 app.use(show404Page);
 
 mongoose

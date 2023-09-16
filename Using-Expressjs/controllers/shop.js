@@ -7,10 +7,17 @@ import Order from "../models/order.js";
 const p = path.join(__dirname, "..", "data", "products.json");
 
 const getIndex = (req, res, next) => {
-  res.render("shop/index", {
-    pageTitle: "Shop",
-    path: "/",
-  });
+  Product.find()
+    .then((products) => {
+      res.render("shop/index", {
+        prods: products,
+        pageTitle: "Shop",
+        path: "/",
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 const getProductsList = (req, res, next) => {

@@ -14,7 +14,7 @@ import {
 
 export const shopRoutes = Router();
 
-// shopRoutes.get("/", getIndex);
+shopRoutes.get("/", getIndex);
 
 shopRoutes.get("/products-list", getProductsList);
 
