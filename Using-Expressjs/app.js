@@ -1,14 +1,17 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { adminRoutes } from "./routes/admin.js";
-import { shopRoutes } from "./routes/shop.js";
-import { authRoutes } from "./routes/auth.js";
-import { show404Page } from "./controllers/404.js";
 import path from "path";
 import { __dirname } from "./utils/path.js";
 import mongoose from "mongoose";
 import User from "./models/user.js";
 import chalk from "chalk";
+import cookieParser from "cookie-parser";
+import session from "express-session";
+// Routes & cCntrollers
+import { adminRoutes } from "./routes/admin.js";
+import { shopRoutes } from "./routes/shop.js";
+import { authRoutes } from "./routes/auth.js";
+import { show404Page } from "./controllers/404.js";
 
 const app = express();
 
@@ -17,6 +20,10 @@ app.set("views", path.join(__dirname, "..", "views"));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "..", "public")));
+app.use(cookieParser());
+app.use(
+  session({ secret: "my session", resave: false, saveUninitialized: false })
+);
 
 app.use((req, res, next) => {
   User.findById("645149c940989cb744d4649a")

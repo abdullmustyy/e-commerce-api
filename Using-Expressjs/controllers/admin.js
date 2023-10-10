@@ -7,6 +7,7 @@ const p = path.join(__dirname, "..", "data", "products.json");
 
 const getAddProduct = (req, res, next) => {
   res.render("admin/edit-product", {
+    isAuthenticated: req.cookies.loggedIn,
     pageTitle: "Add Product",
     path: "/admin/add-product",
     editing: false,
@@ -17,6 +18,7 @@ const getAdminProducts = (req, res, next) => {
   Product.find()
     .then((products) => {
       res.render("admin/products", {
+        isAuthenticated: req.cookies.loggedIn,
         prods: products,
         pageTitle: "Admin Products",
         path: "/admin/products",
@@ -41,6 +43,7 @@ const getEditProduct = (req, res) => {
         return res.redirect("/");
       }
       res.render("admin/edit-product", {
+        isAuthenticated: req.cookies.loggedIn,
         pageTitle: "Edit Product",
         path: "/admin/edit-product",
         editing: editMode,
@@ -59,7 +62,7 @@ const postAddProduct = (req, res, next) => {
     imageUrl: imageUrl,
     price: price,
     description: description,
-    userId: req.user
+    userId: req.user,
   });
 
   product
@@ -76,8 +79,10 @@ const postAddProduct = (req, res, next) => {
 const postEditProduct = (req, res, next) => {
   const { productId, title, imageUrl, price, description } = req.body;
 
-  Product
-    .updateOne({ _id: productId }, { title: title, imageUrl: imageUrl, price: price, description: description })
+  Product.updateOne(
+    { _id: productId },
+    { title: title, imageUrl: imageUrl, price: price, description: description }
+  )
     .then(() => {
       console.log("Updated product!");
       res.redirect("/admin/products");
@@ -91,7 +96,7 @@ const postDeleteProduct = (req, res, next) => {
   const productId = req.body.productId;
   Product.deleteOne({ _id: productId })
     .then(() => {
-      console.log("Product deleted!")
+      console.log("Product deleted!");
       res.redirect("/products-list");
     })
     .catch((err) => {
