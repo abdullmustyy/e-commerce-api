@@ -11,9 +11,11 @@ const postLogin = (req, res, next) => {
   res.redirect("/");
 };
 
-const getLogout = (req, res, next) => {
-  req.session.loggedIn = false;
+const postLogout = (req, res, next) => {
+  req.session.destroy((err) => {
+    console.log(err);
+  });
   res.redirect("/");
 };
 
-export { getLogin, postLogin, getLogout };
+export { getLogin, postLogin, postLogout };
