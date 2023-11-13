@@ -7,7 +7,7 @@ const p = path.join(__dirname, "..", "data", "products.json");
 
 const getAddProduct = (req, res, next) => {
   res.render("admin/edit-product", {
-    isAuthenticated: req.cookies.loggedIn,
+    isAuthenticated: req.session.loggedIn,
     pageTitle: "Add Product",
     path: "/admin/add-product",
     editing: false,
@@ -18,7 +18,7 @@ const getAdminProducts = (req, res, next) => {
   Product.find()
     .then((products) => {
       res.render("admin/products", {
-        isAuthenticated: req.cookies.loggedIn,
+        isAuthenticated: req.session.loggedIn,
         prods: products,
         pageTitle: "Admin Products",
         path: "/admin/products",
@@ -43,7 +43,7 @@ const getEditProduct = (req, res) => {
         return res.redirect("/");
       }
       res.render("admin/edit-product", {
-        isAuthenticated: req.cookies.loggedIn,
+        isAuthenticated: req.session.loggedIn,
         pageTitle: "Edit Product",
         path: "/admin/edit-product",
         editing: editMode,

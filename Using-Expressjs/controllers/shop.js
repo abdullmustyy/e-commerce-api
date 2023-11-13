@@ -10,7 +10,7 @@ const getIndex = (req, res, next) => {
   Product.find()
     .then((products) => {
       res.render("shop/index", {
-        isAuthenticated: req.cookies.loggedIn,
+        isAuthenticated: req.session.loggedIn,
         prods: products,
         pageTitle: "Shop",
         path: "/",
@@ -25,7 +25,7 @@ const getProductsList = (req, res, next) => {
   Product.find()
     .then((products) => {
       res.render("shop/product-list", {
-        isAuthenticated: req.cookies.loggedIn,
+        isAuthenticated: req.session.loggedIn,
         prods: products,
         pageTitle: "Product List",
         path: "/products-list",
@@ -41,7 +41,7 @@ const getProduct = (req, res, next) => {
   Product.findById(productId)
     .then((product) => {
       res.render("shop/product-detail", {
-        isAuthenticated: req.cookies.loggedIn,
+        isAuthenticated: req.session.loggedIn,
         product: product,
         pageTitle: `Product ${productId}`,
         path: null,
@@ -58,7 +58,7 @@ const getCart = (req, res, next) => {
     .then((user) => {
       const cartProducts = user.cart.items;
       res.render("shop/cart", {
-        isAuthenticated: req.cookies.loggedIn,
+        isAuthenticated: req.session.loggedIn,
         pageTitle: "Cart",
         path: "/cart",
         cartProducts: cartProducts,
@@ -104,7 +104,7 @@ const getOrders = (req, res, next) => {
   Order.find({ "user.userId": req.user._id })
     .then((orders) => {
       res.render("shop/orders", {
-        isAuthenticated: req.cookies.loggedIn,
+        isAuthenticated: req.session.loggedIn,
         pageTitle: "Orders",
         path: "/orders",
         orders: orders,
@@ -158,7 +158,7 @@ const postDeleteOrder = (req, res, next) => {
 
 const getCheckout = (req, res, next) => {
   res.render("shop/checkout", {
-    isAuthenticated: req.cookies.loggedIn,
+    isAuthenticated: req.session.loggedIn,
     pageTitle: "Checkout",
     path: "/checkout",
   });
