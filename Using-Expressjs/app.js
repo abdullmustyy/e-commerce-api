@@ -30,23 +30,25 @@ app.use(
   })
 );
 
+app.use((req, res, next) => {
+  if (!req.session.user) return next();
+
+  User.findById(req.session.user._id)
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((err) => {
+      console.log("Error while finding user: \n", err);
+    });
+});
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "..", "views"));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(cookieParser());
-
-app.use((req, res, next) => {
-  User.findById("645149c940989cb744d4649a")
-    .then((user) => {
-      req.user = user;
-      next();
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);

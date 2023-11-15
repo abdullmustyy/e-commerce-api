@@ -1,3 +1,5 @@
+import User from "../models/user.js";
+
 const getLogin = (req, res, next) => {
   res.render("auth/login", {
     isAuthenticated: req.session.loggedIn,
@@ -7,8 +9,18 @@ const getLogin = (req, res, next) => {
 };
 
 const postLogin = (req, res, next) => {
-  req.session.loggedIn = true;
-  res.redirect("/products-list");
+  User.findById("645149c940989cb744d4649a")
+    .then((user) => {
+      req.session.user = user;
+      req.session.loggedIn = true;
+      req.session.save((err) => {
+        err && console.log("Error while saving session: \n", err);
+      });
+      res.redirect("/products-list");
+    })
+    .catch((err) => {
+      console.log("Error saving user to session: \n", err);
+    });
 };
 
 const postLogout = (req, res, next) => {
