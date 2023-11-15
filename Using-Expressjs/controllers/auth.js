@@ -8,14 +8,14 @@ const getLogin = (req, res, next) => {
 
 const postLogin = (req, res, next) => {
   req.session.loggedIn = true;
-  res.redirect("/");
+  res.redirect("/products-list");
 };
 
 const postLogout = (req, res, next) => {
   req.session.destroy((err) => {
-    console.log(err);
+    err && console.log("Error while destroying session: \n", err);
   });
-  res.redirect("/");
+  res.redirect("/products-list");
 };
 
 export { getLogin, postLogin, postLogout };
