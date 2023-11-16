@@ -1,3 +1,3 @@
 # E-Commerce-API
 
-First NodeJS project.
+An E-Commerce Api shipped with core e-commerce related functionalities.
