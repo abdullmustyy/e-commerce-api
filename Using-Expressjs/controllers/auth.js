@@ -16,7 +16,22 @@ const getLogin = (req, res, next) => {
   });
 };
 
-const postSignup = (req, res, next) => {};
+const postSignup = (req, res, next) => {
+  const { email, password, confirmPassword } = req.body;
+
+  User.findOne({ email })
+    .then((user) => {
+      if (user) return res.redirect("/signup");
+
+      return User.create({ email, password, cart: { items: [] } });
+    })
+    .then((result) => {
+      res.redirect("/login");
+    })
+    .catch((err) => {
+      console.log("Error while signing up: \n", err);
+    });
+};
 
 const postLogin = (req, res, next) => {
   User.findById("645149c940989cb744d4649a")

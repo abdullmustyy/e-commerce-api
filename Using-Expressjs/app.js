@@ -58,22 +58,8 @@ app.use(show404Page);
 mongoose
   .connect(MONGODB_URI)
   .then(() => {
-    console.log(chalk.white("MongoDB Connected"));
-
-    User.findOne().then((user) => {
-      if (!user) {
-        const user = new User({
-          name: "Abdul",
-          email: "abdul@test.com",
-          cart: {
-            items: [],
-          },
-        });
-        user.save();
-      }
-    });
-
     app.listen(5000, () => {
+      console.log(chalk.white("MongoDB Connected"));
       console.log(chalk.yellow.underline("Server started on port 5000"));
     });
   })
