@@ -1,4 +1,5 @@
 import User from "../models/user.js";
+import bcryptjs from "bcryptjs";
 
 const getSignup = (req, res, next) => {
   res.render("auth/signup", {
@@ -23,10 +24,18 @@ const postSignup = (req, res, next) => {
     .then((user) => {
       if (user) return res.redirect("/signup");
 
-      return User.create({ email, password, cart: { items: [] } });
-    })
-    .then((result) => {
-      res.redirect("/login");
+      return bcryptjs
+        .hash(password, 12)
+        .then((hashedPassword) => {
+          return User.create({
+            email,
+            password: hashedPassword,
+            cart: { items: [] },
+          });
+        })
+        .then((result) => {
+          res.redirect("/login");
+        });
     })
     .catch((err) => {
       console.log("Error while signing up: \n", err);
@@ -34,17 +43,27 @@ const postSignup = (req, res, next) => {
 };
 
 const postLogin = (req, res, next) => {
-  User.findById("645149c940989cb744d4649a")
+  const { email, password } = req.body;
+
+  User.findOne({ email })
     .then((user) => {
-      req.session.user = user;
-      req.session.loggedIn = true;
-      req.session.save((err) => {
-        err && console.log("Error while saving session: \n", err);
-        res.redirect("/products-list");
+      if (!user) return res.redirect("/login");
+
+      bcryptjs.compare(password, user.password).then((doMatch) => {
+        if (doMatch) {
+          req.session.user = user;
+          req.session.loggedIn = true;
+          req.session.save((err) => {
+            err && console.log("Error while saving session: \n", err);
+            res.redirect("/products-list");
+          });
+        } else {
+          res.redirect("/login");
+        }
       });
     })
     .catch((err) => {
-      console.log("Error saving user to session: \n", err);
+      console.log("An error occurred while logging in: ", "\n", err);
     });
 };
 

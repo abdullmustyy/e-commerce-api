@@ -9,11 +9,12 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import "dotenv/config";
-// Routes & cCntrollers
+// Routes, Cntrollers & Middleware
 import { adminRoutes } from "./routes/admin.js";
 import { shopRoutes } from "./routes/shop.js";
 import { authRoutes } from "./routes/auth.js";
 import { show404Page } from "./controllers/404.js";
+import { isAuth } from "./middleware/is-auth.js";
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
@@ -26,6 +27,7 @@ app.use(
     saveUninitialized: false,
     store: MongoStore.create({
       mongoUrl: MONGODB_URI,
+      ttl: 24 * 60 * 60,
     }),
   })
 );
@@ -50,7 +52,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(cookieParser());
 
-app.use("/admin", adminRoutes);
+app.use("/admin", isAuth, adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
 app.use(show404Page);
