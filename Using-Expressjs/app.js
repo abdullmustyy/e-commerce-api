@@ -9,6 +9,7 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import "dotenv/config";
+import Tokens from "csrf";
 // Routes, Cntrollers & Middleware
 import { adminRoutes } from "./routes/admin.js";
 import { shopRoutes } from "./routes/shop.js";
@@ -17,6 +18,7 @@ import { show404Page } from "./controllers/404.js";
 import { isAuth } from "./middleware/is-auth.js";
 
 const MONGODB_URI = process.env.MONGODB_URI;
+const csrf = new Tokens();
 
 const app = express();
 
@@ -31,6 +33,17 @@ app.use(
     }),
   })
 );
+// CSRF Protection
+app.use((req, res, next) => {
+  const csrfToken = csrf.create("my secret");
+  res.locals.csrfToken = csrfToken;
+  next();
+});
+
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.loggedIn;
+  next();
+});
 
 app.use((req, res, next) => {
   if (!req.session.user) return next();

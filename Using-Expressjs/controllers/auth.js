@@ -3,7 +3,6 @@ import bcryptjs from "bcryptjs";
 
 const getSignup = (req, res, next) => {
   res.render("auth/signup", {
-    isAuthenticated: req.session.loggedIn,
     pageTitle: "Signup",
     path: "/signup",
   });
@@ -11,7 +10,6 @@ const getSignup = (req, res, next) => {
 
 const getLogin = (req, res, next) => {
   res.render("auth/login", {
-    isAuthenticated: req.session.loggedIn,
     pageTitle: "Login",
     path: "/login",
   });
