@@ -25,6 +25,7 @@ const app = express();
 app.use(
   session({
     secret: "my secret",
+    name: "sessionID",
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
@@ -36,12 +37,10 @@ app.use(
 // CSRF Protection
 app.use((req, res, next) => {
   const csrfToken = csrf.create("my secret");
-  res.locals.csrfToken = csrfToken;
-  next();
-});
 
-app.use((req, res, next) => {
+  res.locals.csrfToken = csrfToken;
   res.locals.isAuthenticated = req.session.loggedIn;
+
   next();
 });
 
@@ -73,9 +72,9 @@ app.use(show404Page);
 mongoose
   .connect(MONGODB_URI)
   .then(() => {
-    app.listen(5000, () => {
+    app.listen(8000, () => {
       console.log(chalk.white("MongoDB Connected"));
-      console.log(chalk.yellow.underline("Server started on port 5000"));
+      console.log(chalk.yellow.underline("Server started on port 8000"));
     });
   })
   .catch((err) => {

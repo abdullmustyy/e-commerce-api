@@ -22,6 +22,8 @@ const postSignup = (req, res, next) => {
     .then((user) => {
       if (user) return res.redirect("/signup");
 
+      if (password !== confirmPassword) return res.redirect("/signup");
+
       return bcryptjs
         .hash(password, 12)
         .then((hashedPassword) => {
