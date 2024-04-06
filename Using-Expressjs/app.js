@@ -10,6 +10,7 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import "dotenv/config";
 import Tokens from "csrf";
+import flash from "connect-flash";
 // Routes, Cntrollers & Middleware
 import { adminRoutes } from "./routes/admin.js";
 import { shopRoutes } from "./routes/shop.js";
@@ -43,6 +44,7 @@ app.use((req, res, next) => {
 
   next();
 });
+app.use(flash());
 
 app.use((req, res, next) => {
   if (!req.session.user) return next();

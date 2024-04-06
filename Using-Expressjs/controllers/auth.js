@@ -1,10 +1,12 @@
 import User from "../models/user.js";
 import bcryptjs from "bcryptjs";
+import { renderEmailTemplate } from "../services/email.service.js";
 
 const getSignup = (req, res, next) => {
   res.render("auth/signup", {
     pageTitle: "Signup",
     path: "/signup",
+    errorMessage: req.flash("error"),
   });
 };
 
@@ -12,6 +14,7 @@ const getLogin = (req, res, next) => {
   res.render("auth/login", {
     pageTitle: "Login",
     path: "/login",
+    errorMessage: req.flash("error"),
   });
 };
 
@@ -20,9 +23,17 @@ const postSignup = (req, res, next) => {
 
   User.findOne({ email })
     .then((user) => {
-      if (user) return res.redirect("/signup");
+      if (user) {
+        req.flash("error", "Email already exists. Please login.");
+        return res.redirect("/signup");
+      }
 
-      if (password !== confirmPassword) return res.redirect("/signup");
+      if (password !== confirmPassword) {
+        req.flash("error", "Passwords do not match.");
+        return res.redirect("/signup");
+      }
+
+      const username = email.split("@")[0];
 
       return bcryptjs
         .hash(password, 12)
@@ -35,6 +46,14 @@ const postSignup = (req, res, next) => {
         })
         .then((result) => {
           res.redirect("/login");
+
+          return renderEmailTemplate("template", {
+            email,
+            username,
+            subject: "Signup Successful!",
+            pageTitle: "Signup Successful",
+            body: "You have successfully signed up!",
+          });
         });
     })
     .catch((err) => {
@@ -47,7 +66,10 @@ const postLogin = (req, res, next) => {
 
   User.findOne({ email })
     .then((user) => {
-      if (!user) return res.redirect("/login");
+      if (!user) {
+        req.flash("error", "Invalid email or password.");
+        return res.redirect("/login");
+      }
 
       bcryptjs.compare(password, user.password).then((doMatch) => {
         if (doMatch) {
@@ -58,6 +80,7 @@ const postLogin = (req, res, next) => {
             res.redirect("/products-list");
           });
         } else {
+          req.flash("error", "Invalid email or password.");
           res.redirect("/login");
         }
       });
