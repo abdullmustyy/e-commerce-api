@@ -13,6 +13,7 @@ const getIndex = (req, res, next) => {
         prods: products,
         pageTitle: "Shop",
         path: "/",
+        errorMessage: req.flash("error"),
       });
     })
     .catch((err) => {

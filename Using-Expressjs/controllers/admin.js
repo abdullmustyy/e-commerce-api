@@ -14,10 +14,10 @@ const getAddProduct = (req, res, next) => {
 };
 
 const getAdminProducts = (req, res, next) => {
-  Product.find()
+  Product.find({ userId: req.user._id })
     .then((products) => {
       res.render("admin/products", {
-            prods: products,
+        prods: products,
         pageTitle: "Admin Products",
         path: "/admin/products",
       });
@@ -41,7 +41,7 @@ const getEditProduct = (req, res) => {
         return res.redirect("/");
       }
       res.render("admin/edit-product", {
-            pageTitle: "Edit Product",
+        pageTitle: "Edit Product",
         path: "/admin/edit-product",
         editing: editMode,
         product: product,
@@ -77,10 +77,15 @@ const postEditProduct = (req, res, next) => {
   const { productId, title, imageUrl, price, description } = req.body;
 
   Product.updateOne(
-    { _id: productId },
+    { _id: productId, userId: req.user._id },
     { title: title, imageUrl: imageUrl, price: price, description: description }
   )
-    .then(() => {
+    .then((isUpdated) => {
+      if (isUpdated.modifiedCount === 0) {
+        req.flash("error", "You are not authorized to edit that product.");
+        return res.redirect("/");
+      }
+
       console.log("Updated product!");
       res.redirect("/admin/products");
     })
@@ -91,8 +96,13 @@ const postEditProduct = (req, res, next) => {
 
 const postDeleteProduct = (req, res, next) => {
   const productId = req.body.productId;
-  Product.deleteOne({ _id: productId })
-    .then(() => {
+  Product.deleteOne({ _id: productId, userId: req.user._id })
+    .then((isDeleted) => {
+      if (isDeleted.deletedCount === 0) {
+        req.flash("error", "You are not authorized to delete that product.");
+        return res.redirect("/");
+      }
+
       console.log("Product deleted!");
       res.redirect("/products-list");
     })
