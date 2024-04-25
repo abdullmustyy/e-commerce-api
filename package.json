@@ -29,7 +29,7 @@
     "express-validator": "^7.0.1",
     "mongodb": "^5.1.0",
     "mongoose": "^7.6.5",
-    "mysql2": "^3.9.4",
+    "mysql2": "^3.9.7",
     "nodemailer": "^6.9.13",
     "sequelize": "^6.29.3"
   }
